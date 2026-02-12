@@ -1,0 +1,45 @@
+{
+  "name": "napcat-plugin-novel-downloader",
+  "plugin": "小说下载器",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.mjs",
+  "description": "支持七猫小说搜索和下载",
+  "author": "Novel Downloader Team",
+  "license": "MIT",
+  "keywords": [
+    "napcat",
+    "plugin",
+    "novel",
+    "downloader",
+    "七猫"
+  ],
+  "napcat": {
+    "tags": [
+      "工具",
+      "娱乐"
+    ],
+    "minVersion": "4.14.0",
+    "homepage": ""
+  },
+  "dependencies": {
+    "napcat-types": "0.0.16",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "epub-gen": "^0.1.0",
+    "adm-zip": "^0.5.10"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.3.1",
+    "@types/node": "^20.19.33",
+    "napcat-plugin-debug-cli": "^1.2.8",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.1"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "deploy": "vite build",
+    "typecheck": "tsc --noEmit"
+  }
+}
