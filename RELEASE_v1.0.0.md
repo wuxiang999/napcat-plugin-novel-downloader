@@ -218,4 +218,4 @@ MIT License - 详见 [LICENSE](./LICENSE) 文件
 
 *发布日期: 2026-02-12*  
 *版本: v1.0.0*  
-*作者: Novel Downloader Team*
+*作者: LANHU199*

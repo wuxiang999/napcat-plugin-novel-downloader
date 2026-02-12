@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.mjs",
   "description": "支持七猫小说搜索和下载",
-  "author": "Novel Downloader Team",
+  "author": "LANHU199",
   "license": "MIT",
   "keywords": [
     "napcat",

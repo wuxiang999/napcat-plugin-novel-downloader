@@ -91,6 +91,10 @@ unzip napcat-plugin-novel-downloader.zip -d /path/to/napcat/plugins/
 
 本项目采用 [MIT License](LICENSE) 开源协议。
 
+## 👤 作者
+
+**LANHU199**
+
 ## 🔗 相关链接
 
 - [使用文档](./USAGE.md)
@@ -104,4 +108,4 @@ unzip napcat-plugin-novel-downloader.zip -d /path/to/napcat/plugins/
 
 ---
 
-**Made with ❤️ by Novel Downloader Team**
+**Made with ❤️ by LANHU199**

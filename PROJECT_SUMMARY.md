@@ -6,7 +6,7 @@
 
 - **项目名称**: napcat-plugin-novel-downloader
 - **版本**: 1.0.0
-- **作者**: Novel Downloader Team
+- **作者**: LANHU199
 - **许可证**: MIT
 - **GitHub**: https://github.com/wuxiang999/napcat-plugin-novel-downloader
 
@@ -240,4 +240,5 @@ napcat-plugin-novel-downloader/
 
 **项目状态**: 🟢 活跃开发中  
 **最后更新**: 2026-02-12  
-**文档版本**: 1.0.0
+**文档版本**: 1.0.0  
+**作者**: LANHU199
