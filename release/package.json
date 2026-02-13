@@ -28,18 +28,5 @@
     "cheerio": "^1.0.0-rc.12",
     "epub-gen": "^0.1.0",
     "napcat-types": "0.0.16"
-  },
-  "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.3.1",
-    "@types/node": "^20.19.33",
-    "napcat-plugin-debug-cli": "^1.2.8",
-    "typescript": "^5.9.3",
-    "vite": "^6.4.1"
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
-    "deploy": "vite build && node scripts/prepare-release.js",
-    "typecheck": "tsc --noEmit"
   }
 }
