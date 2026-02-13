@@ -1,12 +1,8 @@
-import type { PluginConfigSchema, NapCatPluginContext } from 'napcat-types';
-import type { PluginConfig } from './types';
-
 /**
- * 插件配置模块
- * 
- * 七猫小说API实现参考:
- * https://github.com/shing-yu/swiftcat-downloader-flutter
+ * 简化的配置模块 - 避免复杂的类型导入
  */
+
+import type { PluginConfig } from './types';
 
 /**
  * 默认配置
@@ -24,20 +20,20 @@ export const defaultConfig: PluginConfig = {
 };
 
 /**
- * 构建配置 Schema（用于 NapCat WebUI）
+ * 构建配置 Schema（简化版）
  */
-export function buildConfigSchema(ctx: NapCatPluginContext): PluginConfigSchema {
+export function buildConfigSchema(ctx: any): any[] {
   const { NapCatConfig } = ctx;
 
   return [
     NapCatConfig.boolean('enabled', '启用插件', true, '是否启用小说下载功能'),
     
     NapCatConfig.html('<h3>👑 权限设置</h3>'),
-    NapCatConfig.text('adminQQ', '管理员QQ', '', '多个QQ号用逗号分隔，管理员和群主无下载限制'),
+    NapCatConfig.text('adminQQ', '管理员QQ', '', '多个QQ号用逗号分隔'),
     
     NapCatConfig.html('<h3>📊 下载限制</h3>'),
-    NapCatConfig.number('dailyLimit', '每日下载限制', 5, '普通用户每日可下载小说数量（管理员和群主无限制）'),
-    NapCatConfig.number('maxChapterLimit', '最大章节限制', 500, '单本小说最大章节数（防止下载超大小说）'),
+    NapCatConfig.number('dailyLimit', '每日下载限制', 5, '普通用户每日可下载小说数量'),
+    NapCatConfig.number('maxChapterLimit', '最大章节限制', 500, '单本小说最大章节数'),
     
     NapCatConfig.html('<h3>⚙️ 性能设置</h3>'),
     NapCatConfig.number('maxConcurrentTasks', '最大并发任务', 3, '同时进行的下载任务数'),

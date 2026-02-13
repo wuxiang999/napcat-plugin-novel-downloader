@@ -16,7 +16,7 @@ const defaultConfig = {
 };
 function buildConfigSchema(ctx) {
   const { NapCatConfig } = ctx;
-  return NapCatConfig.combine(
+  return [
     NapCatConfig.boolean("enabled", "启用插件", true, "是否启用小说下载功能"),
     NapCatConfig.html("<h3>👑 权限设置</h3>"),
     NapCatConfig.text("adminQQ", "管理员QQ", "", "多个QQ号用逗号分隔，管理员和群主无下载限制"),
@@ -35,7 +35,7 @@ function buildConfigSchema(ctx) {
     ]),
     NapCatConfig.html("<h3>🔧 调试选项</h3>"),
     NapCatConfig.boolean("debug", "调试模式", false, "开启后显示详细日志")
-  );
+  ];
 }
 class PluginState {
   constructor() {
