@@ -16,26 +16,22 @@ const defaultConfig = {
 };
 function buildConfigSchema(ctx) {
   const { NapCatConfig } = ctx;
-  return [
-    NapCatConfig.boolean("enabled", "启用插件", true, "是否启用小说下载功能"),
-    NapCatConfig.html("<h3>👑 权限设置</h3>"),
-    NapCatConfig.text("adminQQ", "管理员QQ", "", "多个QQ号用逗号分隔，管理员和群主无下载限制"),
-    NapCatConfig.html("<h3>📊 下载限制</h3>"),
-    NapCatConfig.number("dailyLimit", "每日下载限制", 5, "普通用户每日可下载小说数量（管理员和群主无限制）"),
-    NapCatConfig.number("maxChapterLimit", "最大章节限制", 500, "单本小说最大章节数（防止下载超大小说）"),
-    NapCatConfig.html("<h3>⚙️ 性能设置</h3>"),
-    NapCatConfig.number("maxConcurrentTasks", "最大并发任务", 3, "同时进行的下载任务数"),
-    NapCatConfig.number("apiConcurrency", "API并发数", 350, "单个任务的章节并发下载数"),
-    NapCatConfig.html("<h3>📁 存储设置</h3>"),
-    NapCatConfig.text("downloadDir", "下载目录", "./novels", "小说文件保存目录"),
-    NapCatConfig.select("outputFormat", "输出格式", "txt", "小说文件输出格式", [
-      { label: "TXT 文本", value: "txt" },
-      { label: "EPUB 电子书", value: "epub" },
-      { label: "HTML 网页", value: "html" }
-    ]),
-    NapCatConfig.html("<h3>🔧 调试选项</h3>"),
-    NapCatConfig.boolean("debug", "调试模式", false, "开启后显示详细日志")
-  ];
+  const schema = [];
+  schema.push(NapCatConfig.boolean("enabled", "启用插件", true, "是否启用小说下载功能"));
+  schema.push(NapCatConfig.html("<h3>👑 权限设置</h3>"));
+  schema.push(NapCatConfig.text("adminQQ", "管理员QQ", "", "多个QQ号用逗号分隔"));
+  schema.push(NapCatConfig.html("<h3>📊 下载限制</h3>"));
+  schema.push(NapCatConfig.number("dailyLimit", "每日下载限制", 5, "普通用户每日可下载小说数量"));
+  schema.push(NapCatConfig.number("maxChapterLimit", "最大章节限制", 500, "单本小说最大章节数"));
+  schema.push(NapCatConfig.html("<h3>⚙️ 性能设置</h3>"));
+  schema.push(NapCatConfig.number("maxConcurrentTasks", "最大并发任务", 3, "同时进行的下载任务数"));
+  schema.push(NapCatConfig.number("apiConcurrency", "API并发数", 350, "单个任务的章节并发下载数"));
+  schema.push(NapCatConfig.html("<h3>📁 存储设置</h3>"));
+  schema.push(NapCatConfig.text("downloadDir", "下载目录", "./novels", "小说文件保存目录"));
+  schema.push(NapCatConfig.text("outputFormat", "输出格式", "txt", "输出格式: txt/epub/html"));
+  schema.push(NapCatConfig.html("<h3>🔧 调试选项</h3>"));
+  schema.push(NapCatConfig.boolean("debug", "调试模式", false, "开启后显示详细日志"));
+  return schema;
 }
 class PluginState {
   constructor() {
