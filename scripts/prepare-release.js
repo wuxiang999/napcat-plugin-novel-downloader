@@ -51,8 +51,8 @@ const releasePackageJson = {
   napcat: {
     ...packageJson.napcat,
     homepage,
-  },
-  dependencies: packageJson.dependencies
+  }
+  // 不包含 dependencies - 所有依赖已被 vite 打包或外部化
 };
 fs.writeFileSync(
   path.join(releaseDir, 'package.json'),
