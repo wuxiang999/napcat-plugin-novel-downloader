@@ -44,6 +44,9 @@ downloads/
 # Testing
 coverage/
 .nyc_output/
+test-*/
+*.test.js
+*.spec.js
 
 # Temporary files
 tmp/
@@ -56,3 +59,22 @@ Thumbs.db
 
 # Local helper repo
 napcat-plugin-index/
+
+# Release files (keep in release/ folder only)
+/*.zip
+/*.tgz
+index.mjs
+
+# Debug and development docs
+DEBUG*.md
+SOLUTION*.md
+TEST*.md
+TROUBLESHOOTING*.md
+STEP_BY_STEP*.md
+QUICK_TEST*.md
+PROJECT_SUMMARY*.md
+PUBLISH_GUIDE*.md
+RELEASE_v*.md
+NEXT_STEPS*.md
+DOCKER_DEBUG*.md
+发布指南.md
