@@ -7,7 +7,6 @@
   - 使用 `any[]` 替代 `PluginConfigSchema` 类型
   - 移除 `NapCatConfig.combine()` 改为逐个 push 配置项
   - 移除 `select()` 改用 `text()` 配置项
-  - 详见 [FIX_REPORT.md](./FIX_REPORT.md)
 
 ### ✅ 验证
 - ✅ 插件可以正常启用

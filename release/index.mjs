@@ -3260,6 +3260,35 @@ ${chapter.title}
     }
   }
 }
+function extractLinkInfo(text) {
+  if (!text) return null;
+  const urlPattern = /(https?:\/\/[^\s]+)/gi;
+  const urls = text.match(urlPattern);
+  if (!urls || urls.length === 0) {
+    return null;
+  }
+  const url = urls[0];
+  if (url.includes("qimao.com") || url.includes("wtzw.com")) {
+    const bookIdMatch = url.match(/\/shuku\/(\d+)/);
+    const bookId = bookIdMatch ? bookIdMatch[1] : extractLongestNumber(url);
+    return {
+      url,
+      type: "qimao",
+      bookId
+    };
+  }
+  return null;
+}
+function extractLongestNumber(url) {
+  const matches = url.match(/\d+/g);
+  if (!matches || matches.length === 0) {
+    return void 0;
+  }
+  return matches.reduce((a, b) => a.length > b.length ? a : b);
+}
+function hasLink(text) {
+  return /https?:\/\/[^\s]+/i.test(text);
+}
 const downloader = new NovelDownloader();
 async function handleMessage(ctx, event) {
   var _a;
@@ -3269,6 +3298,13 @@ async function handleMessage(ctx, event) {
   let isGroupOwner = false;
   if (groupId && event.sender) {
     isGroupOwner = event.sender.role === "owner";
+  }
+  if (hasLink(message)) {
+    const linkInfo = extractLinkInfo(message);
+    if (linkInfo && linkInfo.type === "qimao" && linkInfo.bookId) {
+      await handleLinkDownload(ctx, event, linkInfo.bookId, isGroupOwner);
+      return;
+    }
   }
   if (message.startsWith("搜索小说 ") || message.startsWith("搜小说 ")) {
     const keyword = message.replace(/^(搜索小说|搜小说)\s+/, "").trim();
@@ -3507,6 +3543,73 @@ function getStatusText(status) {
     cancelled: "🚫 已取消"
   };
   return statusMap[status] || status;
+}
+async function handleLinkDownload(ctx, event, bookId, isGroupOwner) {
+  const userId = String(event.user_id);
+  const groupId = event.message_type === "group" ? String(event.group_id) : "";
+  const check = pluginState.canUserDownload(userId, isGroupOwner);
+  if (!check.allowed) {
+    await sendMessage(ctx, event, `❌ ${check.reason}`);
+    return;
+  }
+  if (pluginState.activeDownloads.has(userId)) {
+    await sendMessage(ctx, event, '❌ 您已有正在进行的下载任务\n发送 "下载进度" 查看进度');
+    return;
+  }
+  await sendMessage(ctx, event, "🔗 检测到七猫小说链接，正在获取书籍信息...");
+  try {
+    const bookInfo = await downloader.getBookInfo(bookId);
+    if (!bookInfo) {
+      await sendMessage(ctx, event, "❌ 未找到该小说");
+      return;
+    }
+    let card = `━━━━━━━━━━━━━━━━━━
+`;
+    card += `📚 ${bookInfo.book_name}
+`;
+    card += `━━━━━━━━━━━━━━━━━━
+
+`;
+    card += `✍️ 作者: ${bookInfo.author}
+`;
+    card += `📖 来源: ${bookInfo.source}
+`;
+    if (bookInfo.status) card += `📊 状态: ${bookInfo.status}
+`;
+    if (bookInfo.word_number) card += `📝 字数: ${bookInfo.word_number}
+`;
+    if (bookInfo.category) card += `🏷️ 分类: ${bookInfo.category}
+`;
+    card += `
+📥 开始下载中，请稍候...
+`;
+    card += `━━━━━━━━━━━━━━━━━━`;
+    await sendMessage(ctx, event, card);
+    await downloader.startDownload(ctx, userId, groupId, bookId, (progress) => {
+      if (progress.status === "completed") {
+        const duration = Math.round((Date.now() - progress.startTime) / 1e3);
+        let successMsg = `✅ 下载完成！
+
+`;
+        successMsg += `📚 书名: ${bookInfo.book_name}
+`;
+        successMsg += `✍️ 作者: ${bookInfo.author}
+`;
+        successMsg += `📖 章节: ${progress.totalChapters} 章
+`;
+        successMsg += `⏱️ 用时: ${duration}秒
+`;
+        successMsg += `📁 格式: ${pluginState.config.outputFormat.toUpperCase()}`;
+        sendMessage(ctx, event, successMsg);
+      } else if (progress.status === "failed") {
+        sendMessage(ctx, event, `❌ 下载失败: ${progress.error}`);
+      }
+    });
+    pluginState.incrementDownloadCount(userId);
+  } catch (error) {
+    pluginState.logger.error("链接下载失败:", error);
+    await sendMessage(ctx, event, `❌ 下载失败: ${error}`);
+  }
 }
 let plugin_config_ui = [];
 const plugin_init = async (ctx) => {

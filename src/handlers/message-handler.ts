@@ -1,11 +1,13 @@
 import type { NapCatPluginContext, OB11Message } from 'napcat-types';
 import { pluginState } from '../core/state';
 import { NovelDownloader } from '../services/novel-downloader';
+import { extractLinkInfo, hasLink } from '../utils/link-extractor';
 
 /**
  * 消息处理器
  * 
  * 处理用户的小说搜索和下载命令
+ * 支持链接识别（七猫小说）
  * 
  * 七猫小说API实现参考:
  * https://github.com/shing-yu/swiftcat-downloader-flutter
@@ -27,6 +29,16 @@ export async function handleMessage(ctx: NapCatPluginContext, event: OB11Message
   let isGroupOwner = false;
   if (groupId && event.sender) {
     isGroupOwner = event.sender.role === 'owner';
+  }
+
+  // 首先检查是否包含链接
+  if (hasLink(message)) {
+    const linkInfo = extractLinkInfo(message);
+    if (linkInfo && linkInfo.type === 'qimao' && linkInfo.bookId) {
+      // 自动识别七猫链接并下载
+      await handleLinkDownload(ctx, event, linkInfo.bookId, isGroupOwner);
+      return;
+    }
   }
 
   // 搜索小说
@@ -265,4 +277,78 @@ function getStatusText(status: string): string {
     cancelled: '🚫 已取消',
   };
   return statusMap[status] || status;
+}
+
+/**
+ * 处理链接下载
+ */
+async function handleLinkDownload(
+  ctx: NapCatPluginContext,
+  event: OB11Message,
+  bookId: string,
+  isGroupOwner: boolean
+): Promise<void> {
+  const userId = String(event.user_id);
+  const groupId = event.message_type === 'group' ? String(event.group_id) : '';
+
+  // 检查权限
+  const check = pluginState.canUserDownload(userId, isGroupOwner);
+  if (!check.allowed) {
+    await sendMessage(ctx, event, `❌ ${check.reason}`);
+    return;
+  }
+
+  // 检查是否已有下载任务
+  if (pluginState.activeDownloads.has(userId)) {
+    await sendMessage(ctx, event, '❌ 您已有正在进行的下载任务\n发送 "下载进度" 查看进度');
+    return;
+  }
+
+  // 获取书籍详情
+  await sendMessage(ctx, event, '🔗 检测到七猫小说链接，正在获取书籍信息...');
+
+  try {
+    const bookInfo = await downloader.getBookInfo(bookId);
+    if (!bookInfo) {
+      await sendMessage(ctx, event, '❌ 未找到该小说');
+      return;
+    }
+
+    // 发送详情卡片
+    let card = `━━━━━━━━━━━━━━━━━━\n`;
+    card += `📚 ${bookInfo.book_name}\n`;
+    card += `━━━━━━━━━━━━━━━━━━\n\n`;
+    card += `✍️ 作者: ${bookInfo.author}\n`;
+    card += `📖 来源: ${bookInfo.source}\n`;
+    if (bookInfo.status) card += `📊 状态: ${bookInfo.status}\n`;
+    if (bookInfo.word_number) card += `📝 字数: ${bookInfo.word_number}\n`;
+    if (bookInfo.category) card += `🏷️ 分类: ${bookInfo.category}\n`;
+    card += `\n📥 开始下载中，请稍候...\n`;
+    card += `━━━━━━━━━━━━━━━━━━`;
+
+    await sendMessage(ctx, event, card);
+
+    // 开始下载
+    await downloader.startDownload(ctx, userId, groupId, bookId, (progress) => {
+      // 进度回调
+      if (progress.status === 'completed') {
+        const duration = Math.round((Date.now() - progress.startTime) / 1000);
+        let successMsg = `✅ 下载完成！\n\n`;
+        successMsg += `📚 书名: ${bookInfo.book_name}\n`;
+        successMsg += `✍️ 作者: ${bookInfo.author}\n`;
+        successMsg += `📖 章节: ${progress.totalChapters} 章\n`;
+        successMsg += `⏱️ 用时: ${duration}秒\n`;
+        successMsg += `📁 格式: ${pluginState.config.outputFormat.toUpperCase()}`;
+
+        sendMessage(ctx, event, successMsg);
+      } else if (progress.status === 'failed') {
+        sendMessage(ctx, event, `❌ 下载失败: ${progress.error}`);
+      }
+    });
+
+    pluginState.incrementDownloadCount(userId);
+  } catch (error) {
+    pluginState.logger.error('链接下载失败:', error);
+    await sendMessage(ctx, event, `❌ 下载失败: ${error}`);
+  }
 }

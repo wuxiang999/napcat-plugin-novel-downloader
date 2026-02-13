@@ -1,7 +1,7 @@
 # NapCat 小说下载插件
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.5-green.svg)](https://github.com/wuxiang999/napcat-plugin-novel-downloader/releases)
+[![Version](https://img.shields.io/badge/version-1.0.7-green.svg)](https://github.com/wuxiang999/napcat-plugin-novel-downloader/releases)
 [![NapCat](https://img.shields.io/badge/NapCat-%3E%3D4.14.0-orange.svg)](https://napcat.napneko.icu/)
 [![Issues](https://img.shields.io/github/issues/wuxiang999/napcat-plugin-novel-downloader)](https://github.com/wuxiang999/napcat-plugin-novel-downloader/issues)
 
