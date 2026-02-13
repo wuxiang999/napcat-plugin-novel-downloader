@@ -1,0 +1,15 @@
+{
+  "name": "napcat-plugin-novel-downloader",
+  "plugin": "小说下载器",
+  "version": "1.0.3-step1",
+  "type": "module",
+  "main": "index.mjs",
+  "description": "测试步骤1 - 只添加配置UI",
+  "author": "LANHU199",
+  "license": "MIT",
+  "napcat": {
+    "tags": ["工具"],
+    "minVersion": "4.14.0",
+    "homepage": "https://github.com/wuxiang999/napcat-plugin-novel-downloader"
+  }
+}
