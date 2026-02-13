@@ -75,7 +75,6 @@ unzip napcat-plugin-novel-downloader.zip -d /path/to/napcat/plugins/
 | enabled | true | 是否启用插件 |
 | adminQQ | [] | 管理员QQ号列表 |
 | dailyLimit | 5 | 普通用户每日下载限制 |
-| vipDailyLimit | 20 | VIP用户每日下载限制 |
 | maxChapterLimit | 500 | 单本小说最大章节数 |
 | downloadDir | ./novels | 下载目录 |
 | maxConcurrentTasks | 3 | 最大并发任务数 |

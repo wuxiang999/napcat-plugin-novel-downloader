@@ -1,12 +1,17 @@
 {
   "name": "napcat-plugin-novel-downloader",
   "plugin": "小说下载器",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "index.mjs",
   "description": "支持七猫小说搜索和下载",
   "author": "LANHU199",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wuxiang999/napcat-plugin-novel-downloader.git"
+  },
+  "homepage": "https://github.com/wuxiang999/napcat-plugin-novel-downloader",
   "keywords": [
     "napcat",
     "plugin",
@@ -20,7 +25,7 @@
       "娱乐"
     ],
     "minVersion": "4.14.0",
-    "homepage": ""
+    "homepage": "https://github.com/wuxiang999/napcat-plugin-novel-downloader"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",

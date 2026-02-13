@@ -53,3 +53,6 @@ temp/
 # OS
 Thumbs.db
 .DS_Store
+
+# Local helper repo
+napcat-plugin-index/

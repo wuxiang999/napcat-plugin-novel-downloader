@@ -12,10 +12,6 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'napcat-types',
-        'axios',
-        'cheerio',
-        'epub-gen',
-        'adm-zip',
         'fs',
         'path',
         'http',

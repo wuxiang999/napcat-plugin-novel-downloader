@@ -32,17 +32,26 @@ if (fs.existsSync(distFile)) {
 // 创建精简的 package.json
 console.log('📝 创建 package.json...');
 const packageJson = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf-8'));
+const homepage =
+  packageJson.napcat?.homepage ||
+  packageJson.homepage ||
+  (packageJson.repository?.url
+    ? String(packageJson.repository.url).replace(/^git\+/, '').replace(/\.git$/, '')
+    : '');
 const releasePackageJson = {
   name: packageJson.name,
   plugin: packageJson.plugin,
   version: packageJson.version,
   type: packageJson.type,
-  main: packageJson.main,
+  main: 'index.mjs',
   description: packageJson.description,
   author: packageJson.author,
   license: packageJson.license,
   keywords: packageJson.keywords,
-  napcat: packageJson.napcat,
+  napcat: {
+    ...packageJson.napcat,
+    homepage,
+  },
   dependencies: packageJson.dependencies
 };
 fs.writeFileSync(
