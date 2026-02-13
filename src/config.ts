@@ -1,4 +1,4 @@
-import type { PluginConfigSchema, NapCatPluginContext } from 'napcat-types';
+import type { NapCatPluginContext } from 'napcat-types';
 import type { PluginConfig } from './types';
 
 /**
@@ -26,10 +26,10 @@ export const defaultConfig: PluginConfig = {
 /**
  * 构建配置 Schema（用于 NapCat WebUI）
  */
-export function buildConfigSchema(ctx: NapCatPluginContext): PluginConfigSchema {
+export function buildConfigSchema(ctx: NapCatPluginContext): any[] {
   const { NapCatConfig } = ctx;
 
-  const schema = [];
+  const schema: any[] = [];
 
   // 基础设置
   schema.push(NapCatConfig.boolean('enabled', '启用插件', true, '是否启用小说下载功能'));
@@ -59,5 +59,5 @@ export function buildConfigSchema(ctx: NapCatPluginContext): PluginConfigSchema 
   schema.push(NapCatConfig.html('<h3>🔧 调试选项</h3>'));
   schema.push(NapCatConfig.boolean('debug', '调试模式', false, '开启后显示详细日志'));
 
-  return schema as PluginConfigSchema;
+  return schema;
 }

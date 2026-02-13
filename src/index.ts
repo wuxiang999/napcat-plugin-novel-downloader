@@ -12,13 +12,13 @@
  */
 
 // 不导入 EventType，直接使用字符串
-import type { PluginModule, PluginConfigSchema } from 'napcat-types';
+import type { PluginModule } from 'napcat-types';
 import { buildConfigSchema } from './config';
 import { pluginState } from './core/state';
 import { handleMessage } from './handlers/message-handler';
 import type { PluginConfig } from './types';
 
-export let plugin_config_ui: PluginConfigSchema = [];
+export let plugin_config_ui: any[] = [];
 
 /**
  * 插件初始化
