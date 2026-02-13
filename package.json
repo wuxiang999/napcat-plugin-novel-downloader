@@ -45,6 +45,7 @@
     "build": "vite build",
     "dev": "vite build --watch",
     "deploy": "vite build && node scripts/prepare-release.js",
+    "deploy:full": "vite build && node scripts/prepare-release-full.js",
     "typecheck": "tsc --noEmit"
   }
 }
