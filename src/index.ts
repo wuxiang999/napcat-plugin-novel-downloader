@@ -11,8 +11,8 @@
  * @license MIT
  */
 
+// 不导入 EventType，直接使用字符串
 import type { PluginModule, PluginConfigSchema } from 'napcat-types';
-import { EventType } from 'napcat-types';
 import { buildConfigSchema } from './config';
 import { pluginState } from './core/state';
 import { handleMessage } from './handlers/message-handler';
@@ -44,7 +44,8 @@ export const plugin_init: PluginModule['plugin_init'] = async (ctx) => {
  * 消息处理
  */
 export const plugin_onmessage: PluginModule['plugin_onmessage'] = async (ctx, event) => {
-  if (event.post_type !== EventType.MESSAGE) return;
+  // 使用字符串比较而不是 EventType.MESSAGE
+  if (event.post_type !== 'message') return;
   if (!pluginState.config.enabled) return;
   
   await handleMessage(ctx, event);

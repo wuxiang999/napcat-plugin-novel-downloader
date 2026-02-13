@@ -1,4 +1,3 @@
-import { EventType } from "napcat-types";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
@@ -3528,7 +3527,7 @@ const plugin_init = async (ctx) => {
   }
 };
 const plugin_onmessage = async (ctx, event) => {
-  if (event.post_type !== EventType.MESSAGE) return;
+  if (event.post_type !== "message") return;
   if (!pluginState.config.enabled) return;
   await handleMessage(ctx, event);
 };
