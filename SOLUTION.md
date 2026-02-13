@@ -1,8 +1,9 @@
 # 🎉 问题已解决！
 
-## ✅ 根本原因
+## ✅ 问题汇总
 
-插件加载失败的原因是：**导入了 `EventType` 枚举**
+### 问题 1: 插件加载失败
+**原因**: 导入了 `EventType` 枚举
 
 ```typescript
 import { EventType } from 'napcat-types';  // ❌ 这行导致失败
@@ -10,9 +11,7 @@ import { EventType } from 'napcat-types';  // ❌ 这行导致失败
 
 在 Docker 环境中，`napcat-types` 模块可能不存在或版本不兼容，导致插件无法加载。
 
-## 🔧 解决方案
-
-移除 `EventType` 导入，改用字符串比较：
+**解决方案**: 移除 `EventType` 导入，改用字符串比较
 
 ```typescript
 // 之前 ❌
@@ -22,9 +21,36 @@ if (event.post_type !== EventType.MESSAGE) return;
 if (event.post_type !== 'message') return;
 ```
 
-## 📦 修复版本
+**修复版本**: v1.0.4
 
-**v1.0.4** - 已修复 EventType 导入问题
+---
+
+### 问题 2: 配置页面报错 "d.map is not a function"
+**原因**: `buildConfigSchema` 使用了 `NapCatConfig.combine()` 返回的不是数组
+
+```typescript
+return NapCatConfig.combine(  // ❌ combine 返回的不是数组
+  NapCatConfig.boolean(...),
+  NapCatConfig.text(...),
+  ...
+);
+```
+
+**解决方案**: 直接返回数组
+
+```typescript
+return [  // ✅ 直接返回数组
+  NapCatConfig.boolean(...),
+  NapCatConfig.text(...),
+  ...
+];
+```
+
+**修复版本**: v1.0.5
+
+## 📦 最新版本
+
+**v1.0.5** - 已修复所有已知问题
 
 ### 下载方式
 
@@ -33,7 +59,7 @@ if (event.post_type !== 'message') return;
    - 下载 `napcat-plugin-novel-downloader.zip`
 
 2. **使用本地构建的版本**
-   - 文件：`napcat-plugin-novel-downloader-v1.0.4-fixed.zip`
+   - 文件：`napcat-plugin-novel-downloader-v1.0.5.zip`
    - 或直接使用 `release/` 目录的内容
 
 ## 🚀 安装步骤
