@@ -261,19 +261,19 @@ export class QimaoApiClient {
       });
 
       if (response.status === 200 && response.data?.data) {
-        const content = response.data.data.content;
+        let content = response.data.data.content;
         
         // 如果内容是加密的，尝试解密
         if (content && typeof content === 'string') {
           try {
-            return this.decryptChapterContent(content);
+            content = this.decryptChapterContent(content);
           } catch {
             // 如果解密失败，返回原始内容
-            return content;
           }
         }
         
-        return content || '';
+        // 清洗内容
+        return this.cleanContent(content || '');
       }
 
       return '';
@@ -281,6 +281,41 @@ export class QimaoApiClient {
       console.error('[七猫] 获取章节内容失败:', error);
       return '';
     }
+  }
+
+  /**
+   * 清洗章节内容
+   */
+  private cleanContent(raw: string): string {
+    if (!raw) return '';
+    
+    // 1. 解码 HTML 实体
+    let content = raw
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'");
+    
+    // 2. 将 </p> 标签转换为换行符
+    content = content.replace(/<\/p>/g, '\n');
+    
+    // 3. 移除所有 HTML 标签
+    content = content.replace(/<[^>]+>/g, '');
+    
+    // 4. 清理乱码字符（保留中文、英文、数字、常用标点）
+    content = content.replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s，。！？；""''（）【】\n\t]/g, '');
+    
+    // 5. 清理每行首尾空格
+    content = content.replace(/^\s+|\s+$/gm, '');
+    
+    // 6. 清理行内多余空格
+    content = content.replace(/[ \t]+/g, ' ');
+    
+    // 7. 合并连续空行
+    content = content.replace(/\n+/g, '\n').trim();
+    
+    return content;
   }
 
   /**

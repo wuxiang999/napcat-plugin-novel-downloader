@@ -1,7 +1,7 @@
 # NapCat 小说下载插件
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.7-green.svg)](https://github.com/wuxiang999/napcat-plugin-novel-downloader/releases)
+[![Version](https://img.shields.io/badge/version-1.0.8-green.svg)](https://github.com/wuxiang999/napcat-plugin-novel-downloader/releases)
 [![NapCat](https://img.shields.io/badge/NapCat-%3E%3D4.14.0-orange.svg)](https://napcat.napneko.icu/)
 [![Issues](https://img.shields.io/github/issues/wuxiang999/napcat-plugin-novel-downloader)](https://github.com/wuxiang999/napcat-plugin-novel-downloader/issues)
 
@@ -16,6 +16,7 @@
 - 📊 **实时进度** - 下载过程中实时显示进度和速度
 - 📁 **群文件集成** - 自动上传到 QQ 群文件
 - 🎨 **美化卡片** - 精美的消息卡片展示
+- 🔗 **链接识别** - 自动识别七猫小说链接，一键下载
 - ⚙️ **灵活配置** - WebUI 可视化配置
 
 ## 📦 安装
@@ -50,6 +51,18 @@ unzip napcat-plugin-novel-downloader.zip -d /path/to/napcat/plugins/
 下载进度           # 查看当前下载进度
 取消下载           # 取消当前下载任务
 小说帮助           # 查看帮助信息
+```
+
+### 链接识别
+
+支持自动识别七猫小说链接，直接分享链接即可自动下载：
+
+```
+用户: https://www.qimao.com/shuku/1879266/
+机器人: 🔗 检测到七猫小说链接，正在获取书籍信息...
+        📚 书名
+        ✍️ 作者: xxx
+        📥 开始下载中，请稍候...
 ```
 
 ### 使用示例

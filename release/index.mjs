@@ -2932,21 +2932,34 @@ class QimaoApiClient {
         headers: this.getHeaders(bookId)
       });
       if (response.status === 200 && ((_a = response.data) == null ? void 0 : _a.data)) {
-        const content = response.data.data.content;
+        let content = response.data.data.content;
         if (content && typeof content === "string") {
           try {
-            return this.decryptChapterContent(content);
+            content = this.decryptChapterContent(content);
           } catch {
-            return content;
           }
         }
-        return content || "";
+        return this.cleanContent(content || "");
       }
       return "";
     } catch (error) {
       console.error("[七猫] 获取章节内容失败:", error);
       return "";
     }
+  }
+  /**
+   * 清洗章节内容
+   */
+  cleanContent(raw) {
+    if (!raw) return "";
+    let content = raw.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+    content = content.replace(/<\/p>/g, "\n");
+    content = content.replace(/<[^>]+>/g, "");
+    content = content.replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s，。！？；""''（）【】\n\t]/g, "");
+    content = content.replace(/^\s+|\s+$/gm, "");
+    content = content.replace(/[ \t]+/g, " ");
+    content = content.replace(/\n+/g, "\n").trim();
+    return content;
   }
   /**
    * 解密章节内容
